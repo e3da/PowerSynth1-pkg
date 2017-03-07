@@ -1,60 +1,57 @@
-/* Created By: Mihir Mudholkar */
-/* Copyright 2010 */
+// VerilogA for Power_MOS_models, CSD18540Q5B_v1, veriloga
 
-/* pragma lynguent created by ModLyng-1.4.3-S444 */
-/* pragma lynguent exported by Verilog-A Spectre 6.1 */
-
+`include "constants.vams"
 `include "disciplines.vams"
 
-module powerMOSVA(d, g, s);
-    parameter real cgs = 1.614e-9;
-//    parameter real tempc = 27;
-	parameter real q = 1.6021e-19;
+module CSD18540Q5B_v1 (d, g, s);
+parameter real cgs = 3.2e-9;
+//  parameter real tempc = 27;
+    parameter real q = 1.6021e-19;
     parameter real eps = 8.5e-13;
     parameter real k = 1.381e-23;
-    parameter real cds = 550e-12;
+    parameter real cds = 6.5e-9;
     parameter real cgd0 = 1e-12;
-    parameter real coxd = 2.566e-12;
+    parameter real coxd = 320e-12;
     parameter real vtd = 0.01;
     parameter real fc = 0 from [0:0.95];
-    parameter real mScale = 0.3 from [0:0.7];
+    parameter real mScale = 0.52 from [0:0.7];
     parameter real wb = 150e-6;
-    parameter real nb = 3.1e15;
-    parameter real a = 0.02;
-    parameter real agd = 0.013;
-    parameter real theta = 1.2e-3;
-    parameter real thetal = 1.2e-3;
-    parameter real thetatexp = 4.8;
-    parameter real thetaltexp = 4.8;
-    parameter real rs = 36e-6;
-    parameter real kfh = 5;
+    parameter real nb = 8.3e14;
+    parameter real a = 3.416e-1;
+    parameter real agd = 2.33e-2;
+    parameter real theta = 0.0;
+    parameter real thetal = 0.0;
+    parameter real thetatexp = 0;
+    parameter real thetaltexp = 0;
+    parameter real rs = 1e-6;
+    parameter real kfh = 1;
     parameter real kfhtexp = 0;
-    parameter real kph = 0.54;
-    parameter real kphtexp = -0.7;
-    parameter real kfl = 3;
+    parameter real kph = 1;
+    parameter real kphtexp = 0;
+    parameter real kfl = 0.265;
     parameter real kfltexp = 0;
-    parameter real kpl = 0.36;
+    parameter real kpl = 170;
     parameter real kpltexp = 0;
-    parameter real vth = 6.15;
-    parameter real vthtexp = -12e-3;
+    parameter real vth = 2.45;
+    parameter real vthtexp = 0;
     parameter real vtdtexp = 0;
     parameter real vbigd = 0.1;
-    parameter real pvf = 0.54;
+    parameter real pvf = 0.52;
     parameter real fxjbe = 0.5;
     parameter real fxjbm = 0.75;
-    parameter real vtl = 3.5;
-    parameter real vtltexp = -11e-3;
+    parameter real vtl = 2.45;
+    parameter real vtltexp = 0;
     parameter real slmin = 1e-9;
-    parameter real va = 35;
+    parameter real va = 50;
     parameter real vatexp = 0;
     parameter real isr = 0;
     parameter real vpr = 0;
     parameter real id0 = 0;
-    parameter real vb = 1500;
-    parameter real vgstheta = 40;
-    parameter real xtheta = 0.1;
+    parameter real vb = 70;
+    parameter real vgstheta = 0;
+    parameter real xtheta = 0.0;
     parameter real xthetatexp = 1.6e-3;
-	parameter real cgdmod = 0;
+	parameter real cgdmod = 1;
 
     inout d;
     electrical d;
@@ -64,8 +61,8 @@ module powerMOSVA(d, g, s);
     electrical s;
 
     electrical di;
-    electrical N2;
-    electrical N3;
+//    electrical N2;
+//    electrical N3;
 	
     real ads;
     real ni;
@@ -114,16 +111,17 @@ module powerMOSVA(d, g, s);
     real ibreakdown;
     real mufact;
     real imos;
-	real temp;
-	real tref;
-	real xtheta_t;
-	real toxtemp;
+    real temp;
+    real tref;
+    real xtheta_t;
+    real toxtemp;
+    real flag;
 
     branch (d, di) d_di;
     branch (di, s) di_s;
     branch (g, di) g_di;
     branch (g, s) g_s;
-    branch (N2, N3) dummy;
+    //branch (N2, N3) dummy;
 
     analog begin
         // pragma lynguent code fragment "Parameters"
@@ -148,8 +146,11 @@ module powerMOSVA(d, g, s);
         if (ads <= 0)
             ads = 0.2 * agd;
 			
-        ni = 1.7e16 * (pow(temp, 1.5)) * exp(-2.08e4 / temp);
-        mun = 947 / (1 + pow((nb / 1.94e17), 0.61)) * pow((temp / 300), -2.15);
+//        ni = 1.7e16 * (pow(temp, 1.5)) * exp(-2.08e4 / temp);
+//        mun = 947 / (1 + pow((nb / 1.94e17), 0.61)) * pow((temp / 300), -2.15);
+		
+		ni = 3.88e16 * (pow(temp,1.5)/exp(7000/temp));
+		mun = (5.1e18 + 92*pow(nb, 0.91))/(3.75e15 + pow(nb, 0.91)) * pow((300/(temp)), 2.5);
 		
         kph_t = kph * pow((tref/temp),kphtexp);
         kfh_t = kfh * pow((tref/temp),kfhtexp);
@@ -186,7 +187,8 @@ module powerMOSVA(d, g, s);
         vdds = V(d_di) + V(di_s);
         vddn = V(d_di);
         vgd = -vdg;
-        vds = V(dummy);
+		vds = V(di_s);
+        //vds = V(dummy);
          // Drain to Source New Capacitance
         if ((vds + vbi) > 0)
         begin
@@ -217,7 +219,8 @@ module powerMOSVA(d, g, s);
 				wgdj = sqrt((2 * eps * (vdg + vtd_t) / (q * nb)));
 				cgdj = eps * agd / wgdj;
 				cgd = coxd * cgdj / (coxd + cgdj);
-				qcdg = 2 * eps * agd * sqrt((q * nb) / (2 * eps)) * (sqrt(vdg + vtd_t) - sqrt(vtd_t));
+				qcdg = cgd*vdg;
+				//qcdg = 2 * eps * agd * sqrt((q * nb) / (2 * eps)) * (sqrt(vdg + vtd_t) - sqrt(vtd_t));
 			end
 		end
 		else
@@ -258,52 +261,31 @@ module powerMOSVA(d, g, s);
         imosl = 0;
         ibreakdown = 0;
 		// MOSFET current calculation
-        if ((vds >= 0) && (vdds >= 0))
-        begin
-            ibreakdown = id0 * exp(-1 * (vb - vds) / vtk);
-/*			if(vgs>vtl_t)
-			begin
-				if(vgs<=vgstheta)
-				begin
-					if(vds<=((vgs-vtl_t)/pvf))
-						imosl = kfl_t*kpl_t*((vgs-vtl_t)*vds-(pow(pvf,yl-1)*pow(vds,yl)*pow(vgs-vtl_t,((2-yl)/yl))))/(1+thetal_t*(vgs-vtl_t))*(1+vds/va_t);
-					else
-						imosl = kpl_t*pow(vgs-vtl_t,2)/(2*(1+thetal_t*(vgs-vtl_t)))*(1+vds/va_t);
-				end
-				else 
-				begin
-					if(vds<=((vgs-vtl_t)/pvf))
-						imosl = kfl_t*kpl_t*((vgs-vtl_t)*vds-(pow(pvf,yl-1)*pow(vds,yl)*pow((vgs-vtl_t),((2-yl)/yl))))/(1+thetal_t*(vgs-vtl_t))*(1+vds/va_t)/(1+xtheta_t*(vgs-vgstheta));
-					else
-						imosl = kpl_t*pow(vgs-vtl_t,2)/(2*(1+thetal_t*(vgs-vtl_t)))*(1+vds/va_t)/(1+xtheta_t*(vgs-vgstheta));
-				end
-			end
-			
-			if(vgs>=vth_t)
-			begin
-				if(vds<=((vgs-vth_t)/pvf))
-					imosh = kfh_t*kph_t*((vgs-vth_t)*vds-(pow(pvf,(yh-1))*pow(vds,yh)*pow((vgs-vth_t),((2-yh)/yh))))/(1+theta_t*(vgs-vth_t))*(1+vds/va_t);
-				else
-					imosh = kph_t*pow(vgs-vth_t,2)/(2*(1+theta_t*(vgs-vth_t)))*(1+vds/va_t);
-			end
-*/
-		   if (vgs > vtl_t)
+       // if ((vds >= 0) && (vdds >= 0))
+       // begin
+         //   ibreakdown = id0 * exp(-1 * (vb - vds) / vtk);
+
+	   if (vgs > vtl_t)
             begin
-                 // IMOS low current
-                if (vds <= ((vgs - vtl_t) / pvf))
-                    imosl = (kfl_t * kpl_t * ((vgs - vtl_t) * vds - ((pow(pvf, (yl - 1))) * (pow(vds, yl)) * pow((vgs - vtl_t), ((2 - yl))) /
-                    yl)) / (1 + thetal_t * (vgs - vtl_t))) * (1 + vds / va_t);
+		if (vds<0) 
+		    flag=-1;
+		else 
+		    flag = 1;                
+		// IMOS low current
+                if (abs(vds) <= ((vgs - vtl_t) / pvf))
+                    imosl = flag*((kfl_t * kpl_t * ((vgs - vtl_t) * abs(vds) - ((pow(pvf, (yl - 1))) * (pow(abs(vds), yl)) * pow((vgs - vtl_t), ((2 - yl))) /
+                    yl)) / (1 + thetal_t * (vgs - vtl_t))));
                 else
-                    imosl = ((kpl_t * (pow((vgs - vtl_t), 2))) / (2 * (1 + thetal_t * (vgs - vtl_t)))) * (1 + vds / va_t);
+                    imosl = flag*(((kpl_t * (pow((vgs - vtl_t), 2))) / (2 * (1 + thetal_t * (vgs - vtl_t)))));
             end
-            if (vgs >= vth)
+            if (vgs >= vth_t)
             begin
                  // IMOS high current
-                if (vds <= ((vgs - vth_t) / pvf))
-                    imosh = (kfh_t * kph_t * ((vgs - vth_t) * vds - ((pow(pvf, (yh - 1))) * (pow(vds, yh)) * pow((vgs - vth_t), ((2 - yh))) /
-                    yh)) / (1 + theta_t * (vgs - vth_t))) * (1 + vds / va_t);
+                if (abs(vds) <= ((vgs - vth_t) / pvf))
+                    imosh = flag*((kfh_t * kph_t * ((vgs - vth_t) * abs(vds) - ((pow(pvf, (yh - 1))) * (pow(abs(vds), yh)) * pow((vgs - vth_t), ((2 - yh))) /
+                    yh)) / (1 + theta_t * (vgs - vth_t))));
                 else
-                    imosh = ((kph_t * (pow((vgs - vth_t), 2))) / (2 * (1 + theta_t * (vgs - vth_t)))) * (1 + vds / va_t);
+                    imosh = flag*(((kph_t * (pow((vgs - vth_t), 2))) / (2 * (1 + theta_t * (vgs - vth_t)))));
             end
 			
             // Mobility reduction factor
@@ -321,19 +303,19 @@ module powerMOSVA(d, g, s);
             if (mufact < 0.0001)
                 mufact = 0.0001;
             imosh = imosh / mufact;
-        end
+        /*end
         else
         begin
             if (vds < 0)
                 idiode = -1 * isr * (exp(-vds / vtk) - 1);
             else
                 idiode = 0;
-        end
+        end */
         imos = imosh + imosl + ibreakdown + idiode;
         I(g_di) <+ -ddt(qcdg);
         I(g_s) <+ ddt(qcgs);
         I(di_s) <+ imos + ddt(qcdsj);
         I(d_di) <+ irbs;
-        V(dummy): V(dummy)==V(di_s);
+        //V(dummy): V(dummy)==V(di_s);
     end
 endmodule
