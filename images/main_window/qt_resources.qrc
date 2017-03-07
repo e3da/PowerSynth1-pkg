@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="logo">
+    <file>blender_render.png</file>
+    <file>blender_render2.png</file>
+    <file>PowerSynth_Logo_Temp2.png</file>
+  </qresource>
+</RCC>

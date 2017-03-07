@@ -1,0 +1,339 @@
+/* Created By: Mihir Mudholkar */
+/* Copyright 2010 */
+
+/* pragma lynguent created by ModLyng-1.4.3-S444 */
+/* pragma lynguent exported by Verilog-A Spectre 6.1 */
+
+`include "disciplines.vams"
+
+module powerMOSVA(d, g, s);
+    parameter real cgs = 1.614e-9;
+//    parameter real tempc = 27;
+	parameter real q = 1.6021e-19;
+    parameter real eps = 8.5e-13;
+    parameter real k = 1.381e-23;
+    parameter real cds = 550e-12;
+    parameter real cgd0 = 1e-12;
+    parameter real coxd = 2.566e-12;
+    parameter real vtd = 0.01;
+    parameter real fc = 0 from [0:0.95];
+    parameter real mScale = 0.3 from [0:0.7];
+    parameter real wb = 150e-6;
+    parameter real nb = 3.1e15;
+    parameter real a = 0.02;
+    parameter real agd = 0.013;
+    parameter real theta = 1.2e-3;
+    parameter real thetal = 1.2e-3;
+    parameter real thetatexp = 4.8;
+    parameter real thetaltexp = 4.8;
+    parameter real rs = 36e-6;
+    parameter real kfh = 5;
+    parameter real kfhtexp = 0;
+    parameter real kph = 0.54;
+    parameter real kphtexp = -0.7;
+    parameter real kfl = 3;
+    parameter real kfltexp = 0;
+    parameter real kpl = 0.36;
+    parameter real kpltexp = 0;
+    parameter real vth = 6.15;
+    parameter real vthtexp = -12e-3;
+    parameter real vtdtexp = 0;
+    parameter real vbigd = 0.1;
+    parameter real pvf = 0.54;
+    parameter real fxjbe = 0.5;
+    parameter real fxjbm = 0.75;
+    parameter real vtl = 3.5;
+    parameter real vtltexp = -11e-3;
+    parameter real slmin = 1e-9;
+    parameter real va = 35;
+    parameter real vatexp = 0;
+    parameter real isr = 0;
+    parameter real vpr = 0;
+    parameter real id0 = 0;
+    parameter real vb = 1500;
+    parameter real vgstheta = 40;
+    parameter real xtheta = 0.1;
+    parameter real xthetatexp = 1.6e-3;
+	parameter real cgdmod = 0;
+
+    inout d;
+    electrical d;
+    inout g;
+    electrical g;
+    inout s;
+    electrical s;
+
+    electrical di;
+    electrical N2;
+    electrical N3;
+	
+    real ads;
+    real ni;
+    real mun;
+    real kph_t;
+    real kfh_t;
+    real kpl_t;
+    real kfl_t;
+    real theta_t;
+    real thetal_t;
+    real va_t;
+    real vtk;
+    real yh;
+    real pvf_half;
+    real yl;
+    real vth_t;
+    real vtl_t;
+    real vtd_t;
+    real vbi;
+    real f2;
+    real f3;
+    real vdg;
+    real vgs;
+    real vdds;
+    real vddn;
+    real vgd;
+    real vds;
+    real cdsdep;
+    real qcdsj;
+    real wdsj;
+    real wgdj;
+    real cgd;
+    real qcdg;
+    real cgdj;
+    real cgsf;
+    real qcgs;
+    real ciss;
+    real coss;
+    real crss;
+    real w;
+    real rb;
+    real irbs;
+    real idiode;
+    real imosh;
+    real imosl;
+    real ibreakdown;
+    real mufact;
+    real imos;
+	real temp;
+	real tref;
+	real xtheta_t;
+	real toxtemp;
+
+    branch (d, di) d_di;
+    branch (di, s) di_s;
+    branch (g, di) g_di;
+    branch (g, s) g_s;
+    branch (N2, N3) dummy;
+
+    analog begin
+        // pragma lynguent code fragment "Parameters"
+         // Original -> Verilog A Synonym
+         // vttco -> vthtexp
+         // vtdtco -> vtdtexp
+         // vtltco -> vtltexp
+         // vaexp -> vatexp
+         // is -> isr
+         // VB -> vb
+         // vt -> vtk
+         // model->vt -> vth
+         // vt_t -> vth_t
+		temp = $temperature;
+		tref = 300;
+		if (temp <=223) temp = 223;
+		
+//		if (m<0.3) m = 0.3
+//		else if(m>0.7) m = 0.7
+					
+        ads = a - agd;
+        if (ads <= 0)
+            ads = 0.2 * agd;
+			
+        ni = 1.7e16 * (pow(temp, 1.5)) * exp(-2.08e4 / temp);
+        mun = 947 / (1 + pow((nb / 1.94e17), 0.61)) * pow((temp / 300), -2.15);
+		
+        kph_t = kph * pow((tref/temp),kphtexp);
+        kfh_t = kfh * pow((tref/temp),kfhtexp);
+        kpl_t = kpl * pow((tref/temp),kpltexp);
+        kfl_t = kfl * pow((tref/temp),kfltexp);
+		
+        theta_t = theta * pow((tref/temp), thetatexp);
+        thetal_t = thetal * pow((tref/temp), thetaltexp);
+		if(theta_t<=0) theta_t = 0;
+		if(thetal_t<=0) thetal_t = 0;
+		
+		xtheta_t = xtheta + (temp-tref)*xthetatexp;
+        va_t = va - vatexp*(temp-tref);
+        vtk = $vt;
+        if (va_t <= 0)
+            va_t = 1e-20;
+			
+        pvf_half = pvf / 2;
+        if (kfh_t-pvf_half==0)
+            yh = kfh_t / 0.000001;
+        else
+            yh = (kfh_t / (kfh_t - pvf_half));
+        if (kfl_t-pvf_half==0)
+            yl = kfl_t / 0.000001;
+        else
+            yl = (kfl_t / (kfl_t - pvf_half));
+        vth_t = vth + vthtexp * (temp - tref);
+        vtl_t = vtl + vtltexp * (temp - tref);
+        vtd_t = vtd + vtdtexp * (temp - tref);
+        vbi = vtk * ln((nb * 1e16 / (pow(ni, 2))));
+        // pragma lynguent code fragment "Values"
+        vdg = -V(g_di);
+        vgs = V(g_s);
+        vdds = V(d_di) + V(di_s);
+        vddn = V(d_di);
+        vgd = -vdg;
+        vds = V(dummy);
+         // Drain to Source New Capacitance
+        if ((vds + vbi) > 0)
+        begin
+            cdsdep = cds * pow((vbi / (vbi + vds)), mScale);
+            qcdsj = cds * (pow(vbi, mScale)) * (pow((vbi + vds), (1 - mScale)) - pow(vbi, (1 - mScale))) / (1 - mScale);
+        end
+        else
+        begin
+            cdsdep = cds;
+            qcdsj = cdsdep * vds;
+        end
+        if ((vds + vbi) >= 0)
+            wdsj = sqrt((2 * eps * (vds + vbi)) / (q * nb));
+        else
+            wdsj = 0;
+         // Mihir Changes Implemented
+         // Asymptotic fitting for two phase gate-drain capacitance
+        if (cgdmod == 1)
+		begin
+			if (((vdg + vtd_t) <= (q * nb * eps * (pow(agd, 2)) / 200 * (pow(coxd, -2)))))
+			begin
+				wgdj = 0;
+				cgd = coxd;
+				qcdg = coxd * vdg;
+			end
+			else
+			begin
+				wgdj = sqrt((2 * eps * (vdg + vtd_t) / (q * nb)));
+				cgdj = eps * agd / wgdj;
+				cgd = coxd * cgdj / (coxd + cgdj);
+				qcdg = 2 * eps * agd * sqrt((q * nb) / (2 * eps)) * (sqrt(vdg + vtd_t) - sqrt(vtd_t));
+			end
+		end
+		else
+		begin
+			toxtemp = eps * agd / coxd;
+			if (vdg <= -vtd_t)
+				wgdj = 0;
+			else
+				wgdj = sqrt((2 * eps * (vdg + vtd_t) / (q * nb)));
+			
+			cgd = eps * agd / (toxtemp + wgdj);
+			qcdg = cgd * vdg;
+		end	
+        // Gate to source capacitance
+        cgsf = cgs;
+        qcgs = cgsf * vgs;
+         // Datasheet capacitances
+        ciss = cgd + cgsf;
+        coss = cgd + cdsdep;
+        crss = cgd;
+         // IRBS
+         // Calculate depletion widths
+        w = wb - wdsj;
+        if (w < 0)
+            w = 0;
+         //Calculation of RB and IRBS
+        rb = (w / (q * a * nb * mun));
+        irbs = 0;
+        if (rb <= 0)
+            irbs = vddn / rs;
+        else
+            irbs = vddn / (rb + rs);
+         // IMOS
+         // Soft voltage thresholds section omitted
+         // sub-current omitted
+        idiode = 0;
+        imosh = 0;
+        imosl = 0;
+        ibreakdown = 0;
+		// MOSFET current calculation
+        if ((vds >= 0) && (vdds >= 0))
+        begin
+            ibreakdown = id0 * exp(-1 * (vb - vds) / vtk);
+/*			if(vgs>vtl_t)
+			begin
+				if(vgs<=vgstheta)
+				begin
+					if(vds<=((vgs-vtl_t)/pvf))
+						imosl = kfl_t*kpl_t*((vgs-vtl_t)*vds-(pow(pvf,yl-1)*pow(vds,yl)*pow(vgs-vtl_t,((2-yl)/yl))))/(1+thetal_t*(vgs-vtl_t))*(1+vds/va_t);
+					else
+						imosl = kpl_t*pow(vgs-vtl_t,2)/(2*(1+thetal_t*(vgs-vtl_t)))*(1+vds/va_t);
+				end
+				else 
+				begin
+					if(vds<=((vgs-vtl_t)/pvf))
+						imosl = kfl_t*kpl_t*((vgs-vtl_t)*vds-(pow(pvf,yl-1)*pow(vds,yl)*pow((vgs-vtl_t),((2-yl)/yl))))/(1+thetal_t*(vgs-vtl_t))*(1+vds/va_t)/(1+xtheta_t*(vgs-vgstheta));
+					else
+						imosl = kpl_t*pow(vgs-vtl_t,2)/(2*(1+thetal_t*(vgs-vtl_t)))*(1+vds/va_t)/(1+xtheta_t*(vgs-vgstheta));
+				end
+			end
+			
+			if(vgs>=vth_t)
+			begin
+				if(vds<=((vgs-vth_t)/pvf))
+					imosh = kfh_t*kph_t*((vgs-vth_t)*vds-(pow(pvf,(yh-1))*pow(vds,yh)*pow((vgs-vth_t),((2-yh)/yh))))/(1+theta_t*(vgs-vth_t))*(1+vds/va_t);
+				else
+					imosh = kph_t*pow(vgs-vth_t,2)/(2*(1+theta_t*(vgs-vth_t)))*(1+vds/va_t);
+			end
+*/
+		   if (vgs > vtl_t)
+            begin
+                 // IMOS low current
+                if (vds <= ((vgs - vtl_t) / pvf))
+                    imosl = (kfl_t * kpl_t * ((vgs - vtl_t) * vds - ((pow(pvf, (yl - 1))) * (pow(vds, yl)) * pow((vgs - vtl_t), ((2 - yl))) /
+                    yl)) / (1 + thetal_t * (vgs - vtl_t))) * (1 + vds / va_t);
+                else
+                    imosl = ((kpl_t * (pow((vgs - vtl_t), 2))) / (2 * (1 + thetal_t * (vgs - vtl_t)))) * (1 + vds / va_t);
+            end
+            if (vgs >= vth)
+            begin
+                 // IMOS high current
+                if (vds <= ((vgs - vth_t) / pvf))
+                    imosh = (kfh_t * kph_t * ((vgs - vth_t) * vds - ((pow(pvf, (yh - 1))) * (pow(vds, yh)) * pow((vgs - vth_t), ((2 - yh))) /
+                    yh)) / (1 + theta_t * (vgs - vth_t))) * (1 + vds / va_t);
+                else
+                    imosh = ((kph_t * (pow((vgs - vth_t), 2))) / (2 * (1 + theta_t * (vgs - vth_t)))) * (1 + vds / va_t);
+            end
+			
+            // Mobility reduction factor
+            if (vgs >= vtl_t)
+                mufact = 1 + theta_t * (vgs - vtl_t);
+            else
+                mufact = 1;
+            if (mufact < 0.0001)
+                mufact = 0.0001;
+            imosl = imosl / mufact;
+            if (vgs >= vth)
+                mufact = 1 + theta_t * (vgs - vth_t);
+            else
+                mufact = 1;
+            if (mufact < 0.0001)
+                mufact = 0.0001;
+            imosh = imosh / mufact;
+        end
+        else
+        begin
+            if (vds < 0)
+                idiode = -1 * isr * (exp(-vds / vtk) - 1);
+            else
+                idiode = 0;
+        end
+        imos = imosh + imosl + ibreakdown + idiode;
+        I(g_di) <+ -ddt(qcdg);
+        I(g_s) <+ ddt(qcgs);
+        I(di_s) <+ imos + ddt(qcdsj);
+        I(d_di) <+ irbs;
+        V(dummy): V(dummy)==V(di_s);
+    end
+endmodule
