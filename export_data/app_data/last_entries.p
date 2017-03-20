@@ -1,6 +1,6 @@
 (lp0
-VC:\
+VD:\u005cWork\u005cProjects
 p1
-aVC:\
+aVC:\u005cPowerSynth\u005cSample Projects\u005cSimple Module Project\u005clayout.psc
 p2
 a.
