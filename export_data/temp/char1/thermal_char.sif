@@ -106,8 +106,8 @@ End
 
 
 Material 1
-  Density = 9700.0
-  Heat Conductivity = 190.0
+  Density = 2689.0
+  Heat Conductivity = 237.5
 End
 
 
@@ -152,7 +152,7 @@ Boundary Condition 1
   Name = "DeviceLoad"
   Target Boundaries(1) = 2
   Heat Flux BC = Logical True
-  Heat Flux = 105414.066453
+  Heat Flux = 520291.363163
 End
 
 Boundary Condition 2
