@@ -118,20 +118,20 @@ End
 
 
 Material 3
-  Density = 2710.0
-  Heat Conductivity = 200.0
+  Density = 8933.0
+  Heat Conductivity = 400.0
 End
 
 
 Material 4
   Density = 3250.0
-  Heat Conductivity = 160.0
+  Heat Conductivity = 120.0
 End
 
 
 Material 5
-  Density = 2710.0
-  Heat Conductivity = 200.0
+  Density = 8933.0
+  Heat Conductivity = 400.0
 End
 
 
