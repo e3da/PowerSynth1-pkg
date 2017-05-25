@@ -14,7 +14,8 @@ Simulation
   Coordinate Mapping(3) = 1 2 3
 
   Simulation Type = "Steady State"
-  Steady State Max Iterations = 1
+  Steady State Max Iterations = 10
+  Steady State Min Iterations = 5
   Output Intervals = 1
 
   Output File = "data.dat"
@@ -76,12 +77,12 @@ Solver 1
   Variable Dofs = 1
   Linear System Solver = "Iterative"
   Linear System Iterative Method = "TFQMR"
-  Linear System Max Iterations = 500
-  Linear System Convergence Tolerance = 1e-06
+  Linear System Max Iterations = 5000
+  Linear System Convergence Tolerance = 0.001
   Linear System Abort Not Converged = True
   Linear System Preconditioning = "ILU0"
   Linear System Residual Output = 1
-  Steady State Convergence Tolerance = 1e-06
+  Steady State Convergence Tolerance = 0.001
   Stabilize = True
   Nonlinear System Convergence Tolerance = 1.0e-05
   Nonlinear System Max Iterations = 1
@@ -106,9 +107,11 @@ End
 
 
 Material 1
-  Density = 9700.0
-  Heat Conductivity = 190.0
+  Density = 8933.0
+  Heat Conductivity = 400.0
 End
+
+
 
 
 Material 2
@@ -117,10 +120,14 @@ Material 2
 End
 
 
+
+
 Material 3
   Density = 8933.0
   Heat Conductivity = 400.0
 End
+
+
 
 
 Material 4
@@ -129,10 +136,14 @@ Material 4
 End
 
 
+
+
 Material 5
   Density = 8933.0
   Heat Conductivity = 400.0
 End
+
+
 
 
 Material 6
@@ -141,10 +152,14 @@ Material 6
 End
 
 
+
+
 Material 7
-  Density = 8940.0
-  Heat Conductivity = 400.0
+  Density = 3200.0
+  Heat Conductivity = 120.0
 End
+
+
 
 
 
@@ -152,7 +167,7 @@ Boundary Condition 1
   Name = "DeviceLoad"
   Target Boundaries(1) = 2
   Heat Flux BC = Logical True
-  Heat Flux = 230909.552728
+  Heat Flux = 868055.555556
 End
 
 Boundary Condition 2
