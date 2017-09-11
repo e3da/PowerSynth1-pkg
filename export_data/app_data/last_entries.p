@@ -1,6 +1,6 @@
 (lp0
 VC:\u005cUsers\u005cqmle\u005cDesktop
 p1
-aVC:\u005cPowerSynth_git\u005cResponse_Surface\u005cPowerCAD-full\u005csrc\u005cpowercad\u005cproject_builder\u005clayout.psc
+aVC:\u005cUsers\u005cqmle\u005cDesktop\u005cPOETS\u005cFinal\u005cT1\u005cfixed_leads.psc
 p2
 a.
