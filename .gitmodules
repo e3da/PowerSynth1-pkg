@@ -1,3 +1,6 @@
 [submodule "src"]
 	path = src
 	url = ../PowerCAD
+[submodule "test"]
+	path = test
+	url = ../PowerCAD-test
