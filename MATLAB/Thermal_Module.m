@@ -4,16 +4,16 @@
 
 function [OBJ] = Thermal_Module(a,b,t1,k1,As,h,tf,num_s,hSize,hLoad,hLoc)
 
-a ; % thermal plane X dimension
-b ; % thermal plane Y dimension
-t1; % thickness of heat spreader
-k1; % thermal conductivity of heat spreader
-As; % Area heat source
-h ; % convective heat transfer coefficient
-tf; % temperature of fluid
-numSources = num_s;
-hSize; % list of heat source's sizes
-hLoad; % list of heat source's Load
+a = double(a); % thermal plane X dimension
+b = double(b); % thermal plane Y dimension
+t1 = double(t1); % thickness of heat spreader
+k1 = double(k1); % thermal conductivity of heat spreader
+As = double(As); % Area heat source
+h = double(h); % convective heat transfer coefficient
+tf = double(tf); % temperature of fluid
+numSources = double(num_s);
+hSize = double(hSize); % list of heat source's sizes
+hLoad = double(hLoad); % list of heat source's Load
 hLoc;
 res = 11;
 z = 0;
