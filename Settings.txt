@@ -1,0 +1,4 @@
+C:\gmsh-3.0.6-Windows64
+C:\PowerSynth\Elmer 8.2-Release/bin
+C:/Program Files//AnsysEM//AnsysEM18.0//Win64//common//IronPython
+C:\Users\qmle\Desktop\FastHenry
