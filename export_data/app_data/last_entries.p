@@ -1,6 +1,6 @@
 (lp0
-VC:\u005cUsers\u005cqmle\u005cDesktop\u005cDanfoss
+VC:\u005cUsers\u005cqmle\u005cDesktop
 p1
-aVC:\u005cUsers\u005cqmle\u005cDesktop\u005cDanfoss\u005cTutorial.psc
+aVC:\u005cPowerSynth_git\u005cMaster_for_danfoss\u005cPowerCAD-full\u005cTest Project\u005cTutorial Layout\u005clayout.psc
 p2
 a.
