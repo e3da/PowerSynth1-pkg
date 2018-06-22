@@ -6,7 +6,7 @@
     # 3 : script_name
     # 4 : project_path
 # New Project here
-# User Name: qmle ,Script built on: 2018-06-04 15:15:24.907000
+# User Name: qmle ,Script built on: 2018-06-19 17:20:49.232000
 import sys
 sys.path.append("C:/Program Files/AnsysEM/AnsysEM18.2/Win64")
 sys.path.append("C:/Program Files/AnsysEM/AnsysEM18.2/Win64/PythonFiles/DesktopPlugin")
