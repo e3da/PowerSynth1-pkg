@@ -1,4 +1,6 @@
 .*
+scripts
 !/.gitignore
 !/.gitmodules
+!/.gitattributes
 *.pyc
