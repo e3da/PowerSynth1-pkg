@@ -7,7 +7,7 @@ PowerSynth 1 is developed originally by the [MSCAD Lab](https://mscad.uark.edu/)
 
 The main features, models, and algorithms of PowerSynth 1 are summarized in the following papers:
 
-1. [Tristan Evans, Quang Le, Shilpi Mukherjee, Imam Al Razi, Tom Vrotsos, Yarui Peng, and H. Alan Mantooth, “Powersynth: A Power Module Layout Generation Tool”, IEEE Transactions on Power Electronics, vol. 34, no. 6, pp. 5063–5078, Jun 2019, Highlighted Paper.](https://doi.org/10.1109/TPEL.2018.2870346)
-2. [pYarui Peng, Quang Le, Imam Al Razi, Shilpi Mukherjee, Tristan Evans, and H. Alan Mantooth, “PowerSynth Progression on Layout Optimization for Reliability and Signal Integrity”, IEICE Nonlinear Theory and Its Applications, vol. 11, no. 2, pp. 124–144, Apr 2020, Invited Paper.](https://doi.org/10.1587/nolta.11.124)
+* v1.1: Tristan Evans, Quang Le, Shilpi Mukherjee, Imam Al Razi, Tom Vrotsos, Yarui Peng, and H. Alan Mantooth, ["Powersynth: A Power Module Layout Generation Tool"](https://doi.org/10.1109/TPEL.2018.2870346), IEEE Transactions on Power Electronics, vol. 34, no. 6, pp. 5063–5078, Jun 2019, Highlighted Paper.
+* v1.3: Yarui Peng, Quang Le, Imam Al Razi, Shilpi Mukherjee, Tristan Evans, and H. Alan Mantooth, ["PowerSynth Progression on Layout Optimization for Reliability and Signal Integrity"](https://doi.org/10.1587/nolta.11.124), IEICE Nonlinear Theory and Its Applications, vol. 11, no. 2, pp. 124–144, Apr 2020, Invited Paper.
 
 For more details about the PowerSynth project and software, refer to the [PowerSynth Release Website](https://e3da.csce.uark.edu/release/PowerSynth/) with publications and presentations.
