@@ -2,8 +2,10 @@
 ## Repository Overview
 This is the archived top repository for PowerSynth 1. Refer to the [PowerSynth1-src](https://github.com/e3da/PowerSynth1-src) for source code submodule inside the src/ folder. 
 This repository contains additional data files, materials, test cases, and manuals used to prepare the release package. 
-## PowerSynth Project Overview
+# PowerSynth 1 Project Overview
 PowerSynth 1 is developed originally by the [MSCAD Lab](https://mscad.uark.edu/) and then joinly with the [E3DA Lab](https://e3da.csce.uark.edu/), at University of Arkansas. The PowerSynth 1 project is co-directed by [Prof. Alan Mantooth](https://engineering.uark.edu/directory/index/uid/mantooth/name/Alan+Mantooth/) and [Prof. Yarui Peng](https://engineering.uark.edu/directory/index/uid/yrpeng/name/Yarui+Peng/). 
+
+The main developers of this release series include Quang Le, Imam Al Razi, Tristan Evans, and Shilpi Mukherjee. Earlier prototypes (prior to v1.0) are mainly developed by Brett Shook and Zihao Gong. The codebase also received contributions from many collaborators, graduates, and undergrads.
 
 The main features, models, and algorithms of PowerSynth 1 are summarized in the following papers:
 
